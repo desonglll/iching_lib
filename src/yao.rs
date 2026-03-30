@@ -12,8 +12,8 @@ pub enum Yao {
 impl Display for Yao {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
-            Yao::Yin => f.write_char('\u{268A}'),
-            Yao::Yang => f.write_char('\u{268B}'),
+            Yao::Yin => f.write_char('\u{268B}'),
+            Yao::Yang => f.write_char('\u{268A}'),
         }
     }
 }
