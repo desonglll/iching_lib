@@ -28,9 +28,5 @@ pub fn get_dong_yao(num1: u8, num2: u8, shi_chen: Option<u8>) -> u8 {
     let sum = num1 + num2 + time_val;
 
     let remainder = sum % 6;
-    if remainder == 0 {
-        6
-    } else {
-        remainder
-    }
+    if remainder == 0 { 6 } else { remainder }
 }

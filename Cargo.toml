@@ -5,3 +5,4 @@ edition = "2024"
 
 [dependencies]
 chrono = "0.4.44"
+lunar_rust = "1.0.1"

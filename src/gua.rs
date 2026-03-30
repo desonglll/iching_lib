@@ -41,7 +41,7 @@ impl BaGua {
         };
         let index = num - 1;
 
-        let r = match (index) % 8 {
+        let r = match index {
             0 => BaGua::Qian,
             1 => BaGua::Dui,
             2 => BaGua::Li,
@@ -84,8 +84,8 @@ impl BaGua {
         }
     }
 
-    /// 八卦对应的九宫数
-    pub fn jiu_gong(&self) -> u8 {
+    /// 获取八卦对应的先天数（伏羲数）
+    pub fn xian_tian_shu(&self) -> u8 {
         match self {
             BaGua::Qian => 1,
             BaGua::Dui => 2,
@@ -95,6 +95,20 @@ impl BaGua {
             BaGua::Kan => 6,
             BaGua::Gen => 7,
             BaGua::Kun => 8,
+        }
+    }
+
+    /// 获取八卦对应的后天九宫数（洛书数）
+    pub fn jiu_gong_shu(&self) -> u8 {
+        match self {
+            BaGua::Kan => 1,
+            BaGua::Kun => 2,
+            BaGua::Zhen => 3,
+            BaGua::Xun => 4,
+            BaGua::Qian => 6,
+            BaGua::Dui => 7,
+            BaGua::Gen => 8,
+            BaGua::Li => 9,
         }
     }
 
@@ -771,22 +785,23 @@ impl ChongGua {
     }
 
     /// 获取变卦（之卦）
-    pub fn bian_gua(&self, dong_yao_index: u8) -> Self {
-        let mut yaos = self.yao_xiang(); // [Yao; 6] 从下到上
+    pub fn bian_gua(&self, dong_yao_index: u8) -> Option<Self> {
+        if !(1..=6).contains(&dong_yao_index) {
+            return None; // 动爻只能是 1 到 6
+        }
+
+        let mut yaos = self.yao_xiang();
         let idx = (dong_yao_index - 1) as usize;
 
-        // 翻转动爻
         yaos[idx] = match yaos[idx] {
             Yao::Yang => Yao::Yin,
             Yao::Yin => Yao::Yang,
         };
 
-        // 重新组合上下卦
-        // 注意：你需要给 BaGua 实现一个从 [Yao; 3] 恢复的方法，或者硬匹配
         let xia = BaGua::from_yao_xiang([yaos[0], yaos[1], yaos[2]]);
         let shang = BaGua::from_yao_xiang([yaos[3], yaos[4], yaos[5]]);
 
-        ChongGua::new(shang, xia)
+        Some(ChongGua::new(shang, xia))
     }
 }
 
@@ -817,7 +832,7 @@ mod tests {
 
         // 抽查：火雷噬嗑 (序号 38)
         let shi_he = LiuShiSiGua::from_number(38).unwrap();
-        assert_eq!(shi_he.to_chong_gua().shang, BaGua::Li);   // 火
+        assert_eq!(shi_he.to_chong_gua().shang, BaGua::Li); // 火
         assert_eq!(shi_he.to_chong_gua().xia, BaGua::Zhen); // 雷
     }
 
@@ -825,7 +840,7 @@ mod tests {
     fn test_bian_gua() {
         // 以 乾卦 为例，初爻动
         let qian = ChongGua::new(BaGua::Qian, BaGua::Qian);
-        let bian = qian.bian_gua(1); // 初爻在下卦
+        let bian = qian.bian_gua(1).unwrap(); // 初爻在下卦
 
         // 乾卦初爻（阳）变阴 -> 下卦变为 巽 (巽为 [阴, 阳, 阳]) -> 实际上你的 BaGua::Xun 是 [Yin, Yang, Yang]
         // 注意：根据你的 from_yao_xiang，[Yin, Yang, Yang] 是巽，[Yang, Yin, Yin] 是震
