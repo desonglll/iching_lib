@@ -882,4 +882,94 @@ mod tests {
         assert_eq!(ti2, BaGua::Zhen);
         assert_eq!(yong2, BaGua::Li);
     }
+
+    #[test]
+    fn test_bagua_from_number_boundary() {
+        // 测试有效边界值
+        assert_eq!(BaGua::from_number(1), Some(BaGua::Qian));
+        assert_eq!(BaGua::from_number(8), Some(BaGua::Kun));
+        
+        // 测试无效边界值
+        assert_eq!(BaGua::from_number(0), None);
+        assert_eq!(BaGua::from_number(9), None);
+        assert_eq!(BaGua::from_number(u32::MAX), None);
+    }
+
+    #[test]
+    fn test_bagua_yao_xiang() {
+        // 测试乾卦
+        let qian = BaGua::Qian;
+        let yaoxiang_qian = qian.yao_xiang();
+        assert_eq!(yaoxiang_qian, [Yao::Yang, Yao::Yang, Yao::Yang]);
+
+        // 测试兑卦
+        let dui = BaGua::Dui;
+        let yaoxiang_dui = dui.yao_xiang();
+        assert_eq!(yaoxiang_dui, [Yao::Yang, Yao::Yang, Yao::Yin]);
+
+        // 测试离卦
+        let li = BaGua::Li;
+        let yaoxiang_li = li.yao_xiang();
+        assert_eq!(yaoxiang_li, [Yao::Yang, Yao::Yin, Yao::Yang]);
+
+        // 测试震卦
+        let zhen = BaGua::Zhen;
+        let yaoxiang_zhen = zhen.yao_xiang();
+        assert_eq!(yaoxiang_zhen, [Yao::Yang, Yao::Yin, Yao::Yin]);
+
+        // 测试巽卦
+        let xun = BaGua::Xun;
+        let yaoxiang_xun = xun.yao_xiang();
+        assert_eq!(yaoxiang_xun, [Yao::Yin, Yao::Yang, Yao::Yang]);
+
+        // 测试坎卦
+        let kan = BaGua::Kan;
+        let yaoxiang_kan = kan.yao_xiang();
+        assert_eq!(yaoxiang_kan, [Yao::Yin, Yao::Yang, Yao::Yin]);
+
+        // 测试艮卦
+        let gen_gua = BaGua::Gen;
+        let yaoxiang_gen = gen_gua.yao_xiang();
+        assert_eq!(yaoxiang_gen, [Yao::Yin, Yao::Yin, Yao::Yang]);
+
+        // 测试坤卦
+        let kun = BaGua::Kun;
+        let yaoxiang_kun = kun.yao_xiang();
+        assert_eq!(yaoxiang_kun, [Yao::Yin, Yao::Yin, Yao::Yin]);
+    }
+
+    #[test]
+    fn test_bagua_from_yao_xiang() {
+        // 测试乾卦
+        let qian = BaGua::from_yao_xiang([Yao::Yang, Yao::Yang, Yao::Yang]);
+        assert_eq!(qian, BaGua::Qian);
+
+        // 测试兑卦
+        let dui = BaGua::from_yao_xiang([Yao::Yang, Yao::Yang, Yao::Yin]);
+        assert_eq!(dui, BaGua::Dui);
+
+        // 测试离卦
+        let li = BaGua::from_yao_xiang([Yao::Yang, Yao::Yin, Yao::Yang]);
+        assert_eq!(li, BaGua::Li);
+
+        // 测试震卦
+        let zhen = BaGua::from_yao_xiang([Yao::Yang, Yao::Yin, Yao::Yin]);
+        assert_eq!(zhen, BaGua::Zhen);
+
+        // 测试巽卦
+        let xun = BaGua::from_yao_xiang([Yao::Yin, Yao::Yang, Yao::Yang]);
+        assert_eq!(xun, BaGua::Xun);
+
+        // 测试坎卦
+        let kan = BaGua::from_yao_xiang([Yao::Yin, Yao::Yang, Yao::Yin]);
+        assert_eq!(kan, BaGua::Kan);
+
+        // 测试艮卦
+        let gen_gua = BaGua::from_yao_xiang([Yao::Yin, Yao::Yin, Yao::Yang]);
+        assert_eq!(gen_gua, BaGua::Gen);
+
+        // 测试坤卦
+        let kun = BaGua::from_yao_xiang([Yao::Yin, Yao::Yin, Yao::Yin]);
+        assert_eq!(kun, BaGua::Kun);
+    }
 }
