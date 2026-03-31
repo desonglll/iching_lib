@@ -34,7 +34,9 @@ impl Display for BaGua {
 }
 
 impl BaGua {
-    /// 根据数字获得对应的八卦
+    /// 根据数字（1-8）获得对应的八卦
+    ///
+    /// 乾一、兑二、离三、震四、巽五、坎六、艮七、坤八
     pub fn from_number(num: u32) -> Option<Self> {
         if !(1..=8).contains(&num) {
             return None;
@@ -42,19 +44,21 @@ impl BaGua {
         let index = num - 1;
 
         let r = match index {
-            0 => BaGua::Qian,
-            1 => BaGua::Dui,
-            2 => BaGua::Li,
-            3 => BaGua::Zhen,
-            4 => BaGua::Xun,
-            5 => BaGua::Kan,
-            6 => BaGua::Gen,
-            7 => BaGua::Kun,
+            0 => BaGua::Qian, // 乾1
+            1 => BaGua::Dui, // 兑2
+            2 => BaGua::Li, // 离3
+            3 => BaGua::Zhen, // 震4
+            4 => BaGua::Xun, // 巽5
+            5 => BaGua::Kan, // 坎6
+            6 => BaGua::Gen, // 艮7
+            7 => BaGua::Kun, // 坤8
             _ => unreachable!(),
         };
         Some(r)
     }
+
     /// 获取八卦对应的 Unicode 符号 (\u{2630} - \u{2637})
+    ///
     /// 乾一、兑二、离三、震四、巽五、坎六、艮七、坤八
     pub fn unicode_symbol(&self) -> char {
         match self {
